@@ -1,0 +1,3 @@
+#!/bin/bash
+
+aws s3api list-buckets --query "Buckets" --output json | jq '.[] | .Name' | sort -h| xargs -I {} echo -e {}

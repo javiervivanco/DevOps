@@ -1,0 +1,3 @@
+#!/bin/sh
+
+terraform init -migrate-state -backend-config="username=${GITLAB_USERNAME}" -backend-config="password=${GITLAB_TOKEN}"

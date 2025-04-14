@@ -1,0 +1,7 @@
+#!/bin/bash
+MOUNTED=$(df -T | grep fuse | awk '{print $7}')
+if [ -n "$MOUNTED" ]; then
+
+    UMOUNT=$( echo -e "$MOUNTED" | gum filter)
+    sudo umount $UMOUNT
+fi

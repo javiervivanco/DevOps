@@ -1,0 +1,8 @@
+#!/bin/bash
+
+if [ -z "$GITLAB_HOST" ]; then
+	echo "Error: GITLAB_HOST is not set. Exiting."
+	exit 1
+fi
+CI_API_V4_URL="https://$GITLAB_HOST/api/v4/"
+gum spin --show-output -- curl -s --header "PRIVATE-TOKEN: $GITLAB_TOKEN" "$CI_API_V4_URL/projects/?per_page=1000" |  jq -r ".[] | \"ssh://git@$GITLAB_HOST:2226/\(.path_with_namespace).git\"" |sort -h

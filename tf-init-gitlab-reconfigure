@@ -1,0 +1,4 @@
+#!/bin/sh
+echo "username=${GITLAB_USERNAME}"
+echo "pass=${GITLAB_TOKEN}"
+terraform init --reconfigure -backend-config="username=${GITLAB_USERNAME}" -backend-config="password=${GITLAB_TOKEN}"

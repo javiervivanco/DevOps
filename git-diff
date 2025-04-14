@@ -1,0 +1,3 @@
+#!/bin/sh
+DIR=$(git rev-parse --show-toplevel)
+gum filter --no-limit --header "git diff ..." $(git diff --name-only) | xargs -I {} git diff $DIR/{} | gum pager

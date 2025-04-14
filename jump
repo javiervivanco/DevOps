@@ -1,0 +1,5 @@
+#!/bin/sh
+DIR=$(dirname "$0")
+REPO_DEVOPS=$(realpath $DIR/../)
+
+echo "$REPO_DEVOPS$(find $REPO_DEVOPS -not \( -path $REPO_DEVOPS/s3 -prune  \) -not \( -path $REPO_DEVOPS/poc -prune  \) -not \( -path $REPO_DEVOPS/repos -prune  \)  -not \( -name .terraform -prune \)  -not \( -name .git -prune \)  -type d | sed  "s|${REPO_DEVOPS}||g" | gum filter --header="$REPO_DEVOPS" )"

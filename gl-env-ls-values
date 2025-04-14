@@ -1,0 +1,14 @@
+#!/bin/bash
+DIR=$(dirname "$0")
+if [ -z "$GITLAB_HOST" ]; then
+	echo "Error: GITLAB_HOST is not set. Exiting."
+	exit 1
+fi
+CI_API_V4_URL="https://$GITLAB_HOST/api/v4/"
+PROJECT_ID=$1
+if [ -z "$PROJECT_ID" ];then
+    PROJECT_ID=$($DIR/gl-repo-ls-id)
+fi
+if [ -n "$PROJECT_ID" ];then
+    gum spin --show-output -- curl -s --header "PRIVATE-TOKEN: $GITLAB_TOKEN" "$CI_API_V4_URL/projects/$PROJECT_ID/variables/?per_page=1000" |  jq -r ".[] | \"\(.key)=\(.value)\""
+fi

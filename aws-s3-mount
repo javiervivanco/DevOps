@@ -1,0 +1,11 @@
+#!/bin/bash
+DIR=$(dirname "$0")
+MOUNT=$(source "$DIR/aws-s3-ls"| gum filter)
+TO=$1
+
+if [ -z "$1" ]; then
+    TO=$(gum file --directory)
+fi
+mkdir -p "$TO/$MOUNT"
+s3fs $MOUNT "$TO/$MOUNT"
+echo "Se monto $MOUNT en "$TO/$MOUNT""

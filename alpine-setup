@@ -1,0 +1,24 @@
+#!/bin/sh
+
+apk add -u curl git tar openssl aws-cli ansible terraform gum bash jq yq openssh \
+        openrc \
+        acl \
+        file \
+        gettext \
+        openssh-client \
+        openssl \
+        libzip-dev \
+        postgresql \
+        libpq-dev \
+        git \
+        curl \
+        racket \
+        make \
+        docker \
+        sudo \
+        curl \
+        vim \
+        yq \
+        groff \
+        less\
+        nodejs npm\

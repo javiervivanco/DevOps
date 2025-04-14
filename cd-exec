@@ -1,0 +1,4 @@
+#!/bin/sh
+DIR=$(realpath $(dirname "$0"))
+cd $2
+$DIR/$1

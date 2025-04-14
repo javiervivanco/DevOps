@@ -1,0 +1,33 @@
+#!/bin/bash
+export GITLAB_ACCESS_TOKEN=$GITLAB_TOKEN
+STATE_NAME=$1
+$PROJECT_ID=$2
+$USERNAME=$3
+# Function to display usage information
+function usage() {
+    echo "Usage: $0 <state_name> <project_id> <username>"
+    echo "  <state_name>  - The name of the Terraform state"
+    echo "  <project_id>  - The GitLab project ID"
+    echo "  <username>    - The GitLab username"
+    exit 1
+}
+
+# Validate input variables
+if [ -z "$GITLAB_TOKEN" ]; then
+    echo "Error: GITLAB_TOKEN environment variable is not set."
+    exit 1
+fi
+
+if [ -z "$STATE_NAME" ] || [ -z "$PROJECT_ID" ] || [ -z "$USERNAME" ]; then
+    echo "Error: Missing required arguments."
+    usage
+fi
+terraform init \
+    -backend-config="address=https://$GITLAB_HOST/api/v4/projects/$PROJECT_ID/terraform/state/$STATE_NAME" \
+    -backend-config="lock_address=https://$GITLAB_HOST/api/v4/projects/$PROJECT_ID/terraform/state/$STATE_NAME/lock" \
+    -backend-config="unlock_address=https://$GITLAB_HOST/api/v4/projects/$PROJECT_ID/terraform/state/$STATE_NAME/lock" \
+    -backend-config="username=$USERNAME" \
+    -backend-config="password=$GITLAB_TOKEN" \
+    -backend-config="lock_method=POST" \
+    -backend-config="unlock_method=DELETE" \
+    -backend-config="retry_wait_min=5"

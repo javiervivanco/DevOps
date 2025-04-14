@@ -1,0 +1,4 @@
+#!/bin/sh
+DIR=$(dirname "$0")
+REPO_DEVOPS=$(realpath $DIR/../)
+gum filter --no-limit --header "git diff ..." $(git diff --name-only) | xargs -I {} edit $REPO_DEVOPS/{}

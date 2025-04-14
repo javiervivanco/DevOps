@@ -1,0 +1,29 @@
+#!/bin/sh
+DIR=$(git rev-parse --show-toplevel)
+gum filter --no-limit --header "git add ..." $(git ls-files --others --exclude-standard ) $(git diff --name-only) | xargs -I {} git add $DIR/{}
+
+TYPE=$(gum choose "fix" "feat" "docs" "style" "refactor" "test" "chore" "revert")
+
+if [ -f "$DIR/.scopes" ]; then
+	SCOPE=$(cat "$DIR/.scopes" | gum filter)
+else
+	SCOPE=$(gum input --placeholder "scope")
+
+fi
+
+
+# Since the scope is optional, wrap it in parentheses if it has a value.
+test -n "$SCOPE" && SCOPE="($SCOPE)"
+
+# Pre-populate the input with the type(scope): so that the user may change it
+SUMMARY=$(gum input --value "$TYPE$SCOPE: " --placeholder "Summary of this change")
+DESCRIPTION=$(gum write --placeholder "Details of this change (CTRL+D to finish)")
+
+# Commit these changes
+echo "# $SUMMARY" | gum format -t markdown
+if [ -n "$DESCRIPTION" ]; then
+  echo "> $DESCRIPTION" | gum format -t markdown
+fi
+echo "\n"
+gum confirm "Commit changes?\n $(git diff --name-status --cached)" && git commit -m "$SUMMARY" -m "$DESCRIPTION"
+
